@@ -12,6 +12,11 @@ from tools.texte import  extraire_mots_cles, formater_rapport, resumer_texte
 from tools.recommandation import recommander_produits
 from tools.portefeuille import calculer_portefeuille
 
+from langchain_openai import ChatOpenAI
+from langchain_classic.agents import AgentExecutor, create_openai_tools_agent
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_classic import hub
+
 
 # A3
 tavily_tool = TavilySearchResults(max_results=1)
@@ -86,31 +91,44 @@ tools =[
 def creer_agent():
     """Crée et retourne un agent LangChain configuré."""
     from langchain_openai import ChatOpenAI
-    from langchain_classic.agents import AgentExecutor, create_react_agent
+    from langchain_classic.agents import AgentExecutor, create_openai_tools_agent
     from langchain_classic import hub
+    from langchain_classic.memory import ConversationBufferMemory
     import os
 
     # Initialisation du LLM
     llm = ChatOpenAI(
         model="gpt-4o-mini",
-        temperature=0,           # 0 = déterministe (résultats reproductibles)
-        openai_api_key=os.getenv('OPENAI_API_KEY')
+        temperature=0,
+        openai_api_key=os.getenv("OPENAI_API_KEY")
     )
-    # Chargement du prompt ReAct depuis le hub LangChain
-    # Ce prompt enseigne au LLM le cycle Thought → Action → Observation
-    prompt = hub.pull("hwchase17/react")
 
-    # Création de l'agent avec la stratégie ReAct
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
+    # Prompt compatible tools + memory
+    prompt = hub.pull("hwchase17/openai-tools-agent")
 
-    # Création de l'exécuteur
+    # Mémoire conversationnelle
+    memory = ConversationBufferMemory(
+        memory_key="chat_history",
+        return_messages=True
+    )
+
+    # Création de l'agent (tools + memory aware)
+    agent = create_openai_tools_agent(
+        llm=llm,
+        tools=tools,
+        prompt=prompt
+    )
+
+    # Agent executor avec mémoire
     agent_executor = AgentExecutor(
         agent=agent,
         tools=tools,
-        verbose=True,            # Affiche le raisonnement étape par étape
-        max_iterations=10,       # Évite les boucles infinies
+        memory=memory,
+        verbose=True,
+        max_iterations=10,
         handle_parsing_errors=True
     )
+
     return agent_executor
 
 
