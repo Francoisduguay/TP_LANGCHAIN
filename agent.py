@@ -10,10 +10,11 @@ from tools.calculs import calculer_interets_composes, calculer_marge, calculer_m
 from tools.api_publique import convertir_devise
 from tools.texte import  extraire_mots_cles, formater_rapport, resumer_texte
 from tools.recommandation import recommander_produits
+from tools.portefeuille import calculer_portefeuille
 
 
 # A3
-tavily_tool = TavilySearchResults(max_results=3)
+tavily_tool = TavilySearchResults(max_results=1)
 tavily_tool.name = "recherche_web"
 tavily_tool.description = (
     "Effectue une recherche web en temps réel pour obtenir des informations récentes "
@@ -63,6 +64,10 @@ tools =[
                      'Entrée : budget,categorie,type_compte ex 300,Informatique,Premium. '
                      'Catégories : Informatique, Mobilier, Audio, Toutes. '
                      'Types : Standard, Premium, VIP.'),
+     Tool(name="calculer_portefeuille", func=calculer_portefeuille,
+          description="Calcule la valeur d'un portefeuille d'actions et cryptos. "
+                       "Entrée format: SYMBOLE:QUANTITE|SYMBOLE:QUANTITE "
+                       "Exemple: AAPL:5|MSFT:2|BTC:1"),
      tavily_tool
 ]
 

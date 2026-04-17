@@ -52,6 +52,16 @@ SCENARIOS = {
         "2) Convertis 1000 USD en EUR. "
         "3) Si j'investis 5000€ à 7% pendant 10 ans, quel capital ?"
     ),
+    "9": (
+        "Actualités Apple aujourd'hui",
+        "Donne moi les actualités de Apple aujourd'hui"
+    ),
+    "10": (
+        "Calcul de Portefeuille Boursier",
+        "AAPL:5|MSFT:2|BTC:1"
+        "récupère le cours actuel de chaque action via yfinance"
+        "retourne la valeur de chaque ligne, la valeur totale et la variation globale du jour"
+    )
 }
 
 
