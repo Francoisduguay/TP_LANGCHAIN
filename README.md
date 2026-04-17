@@ -8,3 +8,9 @@ From project root, run:
 ## 2. Create and populate db
 From project root, run:
 - ```python init_db.py```
+
+## 3. To chat in terminal
+- ```python main.py```
+
+## 4. To start the streamlit interface
+- ```streamlit run app.py```
