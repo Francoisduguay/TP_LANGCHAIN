@@ -1,4 +1,8 @@
 from langchain_classic.tools import Tool
+from dotenv import load_dotenv
+load_dotenv()
+
+from langchain_community.tools import TavilySearchResults
 
 from tools.database import rechercher_client, rechercher_produit
 from tools.finance import obtenir_cours_action, obtenir_cours_crypto
@@ -6,6 +10,17 @@ from tools.calculs import calculer_interets_composes, calculer_marge, calculer_m
 from tools.api_publique import convertir_devise
 from tools.texte import  extraire_mots_cles, formater_rapport, resumer_texte
 from tools.recommandation import recommander_produits
+
+
+# A3
+tavily_tool = TavilySearchResults(max_results=3)
+tavily_tool.name = "recherche_web"
+tavily_tool.description = (
+    "Effectue une recherche web en temps réel pour obtenir des informations récentes "
+    "ou externes non disponibles dans les outils internes. "
+    "Utiliser pour : actualités, entreprises, finance, événements récents ou questions générales. "
+    "Entrée : une question en langage naturel."
+)
 
 tools =[
     # ── Outil 1 : Base de données ─────────────────────────────────────
@@ -48,6 +63,7 @@ tools =[
                      'Entrée : budget,categorie,type_compte ex 300,Informatique,Premium. '
                      'Catégories : Informatique, Mobilier, Audio, Toutes. '
                      'Types : Standard, Premium, VIP.'),
+     tavily_tool
 ]
 
 def creer_agent():
