@@ -61,6 +61,10 @@ SCENARIOS = {
         "AAPL:5|MSFT:2|BTC:1"
         "récupère le cours actuel de chaque action via yfinance"
         "retourne la valeur de chaque ligne, la valeur totale et la variation globale du jour"
+    ),
+    "11": (
+        "B2 Calcule moyenne et écart-type des prix suivants :",
+        "[10, 15, 20, 25, 30]"
     )
 }
 

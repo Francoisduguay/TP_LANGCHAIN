@@ -1,9 +1,9 @@
 from langchain_classic.tools import Tool
+from langchain_experimental.tools import PythonREPLTool
 from dotenv import load_dotenv
 load_dotenv()
 
 from langchain_community.tools import TavilySearchResults
-
 from tools.database import rechercher_client, rechercher_produit
 from tools.finance import obtenir_cours_action, obtenir_cours_crypto
 from tools.calculs import calculer_interets_composes, calculer_marge, calculer_mensualite_pret, calculer_tva
@@ -22,6 +22,17 @@ tavily_tool.description = (
     "Utiliser pour : actualités, entreprises, finance, événements récents ou questions générales. "
     "Entrée : une question en langage naturel."
 )
+
+# B2
+python_repl = PythonREPLTool()
+python_repl.description = (
+    "Exécute du code Python pour effectuer des calculs complexes, "
+    "analyses de données ou traitements non couverts par les autres outils. "
+    "Entrée : code Python valide sous forme de chaîne."
+)
+# ATTENTION SECURITE : cet outil exécute du code arbitraire.
+# Ne jamais utiliser en production sans sandbox.
+
 
 tools =[
     # ── Outil 1 : Base de données ─────────────────────────────────────
@@ -68,7 +79,8 @@ tools =[
           description="Calcule la valeur d'un portefeuille d'actions et cryptos. "
                        "Entrée format: SYMBOLE:QUANTITE|SYMBOLE:QUANTITE "
                        "Exemple: AAPL:5|MSFT:2|BTC:1"),
-     tavily_tool
+     tavily_tool,
+     python_repl
 ]
 
 def creer_agent():
